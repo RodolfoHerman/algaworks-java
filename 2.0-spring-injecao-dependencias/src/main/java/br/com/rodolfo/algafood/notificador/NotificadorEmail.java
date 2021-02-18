@@ -1,9 +1,11 @@
 package br.com.rodolfo.algafood.notificador;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import br.com.rodolfo.algafood.models.Cliente;
 
+@Primary
 @Component
 public class NotificadorEmail implements Notificador {
 
