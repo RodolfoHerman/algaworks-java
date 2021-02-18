@@ -1,8 +1,7 @@
 package br.com.rodolfo.algafood.services;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,19 +11,19 @@ import br.com.rodolfo.algafood.notificador.TipoNotificador;
 import br.com.rodolfo.algafood.notificador.enums.NivelUrgencia;
 
 @Component
-public class AtivacaoClienteService {
+public class AtivacaoClienteService implements InitializingBean, DisposableBean {
     
     @TipoNotificador(NivelUrgencia.NAO_URGENTE)
     @Autowired
     private Notificador notificador;
 
-    @PostConstruct
-    public void init() {
+    @Override
+    public void afterPropertiesSet() throws Exception {
         System.out.println("INIT");
     }
 
-    @PreDestroy
-    public void destroy() {
+    @Override
+    public void destroy() throws Exception {
         System.out.println("DESTROY");
     }
 
