@@ -1,16 +1,17 @@
 package br.com.rodolfo.algafood.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import br.com.rodolfo.algafood.models.Cliente;
 import br.com.rodolfo.algafood.notificador.Notificador;
+import br.com.rodolfo.algafood.notificador.TipoNotificador;
+import br.com.rodolfo.algafood.notificador.enums.NivelUrgencia;
 
 @Component
 public class AtivacaoClienteService {
     
-    @Qualifier("urgente")
+    @TipoNotificador(NivelUrgencia.NAO_URGENTE)
     @Autowired
     private Notificador notificador;
 

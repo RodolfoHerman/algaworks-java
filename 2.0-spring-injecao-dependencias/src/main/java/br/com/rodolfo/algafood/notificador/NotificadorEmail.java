@@ -1,11 +1,11 @@
 package br.com.rodolfo.algafood.notificador;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import br.com.rodolfo.algafood.models.Cliente;
+import br.com.rodolfo.algafood.notificador.enums.NivelUrgencia;
 
-@Qualifier("normal")
+@TipoNotificador(NivelUrgencia.NAO_URGENTE)
 @Component
 public class NotificadorEmail implements Notificador {
 
