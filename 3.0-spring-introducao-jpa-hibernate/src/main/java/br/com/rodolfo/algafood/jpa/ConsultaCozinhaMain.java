@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 
 import br.com.rodolfo.algafood.AlgafoodApiApplication;
 import br.com.rodolfo.algafood.domain.models.Cozinha;
+import br.com.rodolfo.algafood.domain.repository.CozinhaRepository;
 
 public class ConsultaCozinhaMain {
 
@@ -16,8 +17,8 @@ public class ConsultaCozinhaMain {
             .web(WebApplicationType.NONE)
             .run(args);
 
-        CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
-        List<Cozinha> cozinhas = cadastroCozinha.listar();
+        CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
+        List<Cozinha> cozinhas = cozinhaRepository.listar();
 
         cozinhas.forEach(cozinha -> System.out.println(cozinha.getNome()));
     }
