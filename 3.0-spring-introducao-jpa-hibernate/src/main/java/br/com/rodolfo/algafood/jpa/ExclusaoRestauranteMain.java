@@ -5,20 +5,21 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
 import br.com.rodolfo.algafood.AlgafoodApiApplication;
-import br.com.rodolfo.algafood.domain.models.Cozinha;
-import br.com.rodolfo.algafood.domain.repository.CozinhaRepository;
+import br.com.rodolfo.algafood.domain.models.Restaurante;
+import br.com.rodolfo.algafood.domain.repository.RestauranteRepository;
 
-public class BuscarCozinhaMain {
+public class ExclusaoRestauranteMain {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApiApplication.class)
             .web(WebApplicationType.NONE)
             .run(args);
 
-        CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
+        RestauranteRepository restauranteRepository = applicationContext.getBean(RestauranteRepository.class);
 
-        Cozinha cozinha = cozinhaRepository.buscar(1l);
+        Restaurante restaurante = new Restaurante();
+        restaurante.setId(1l);
 
-        System.out.printf("%d - %s\n", cozinha.getId(), cozinha.getNome());
+        restauranteRepository.remover(restaurante);
     }
 }
