@@ -1,6 +1,4 @@
-package br.com.rodolfo.algafood.jpa;
-
-import java.util.List;
+package br.com.rodolfo.algafood.jpa.restaurantes;
 
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -10,7 +8,7 @@ import br.com.rodolfo.algafood.AlgafoodApiApplication;
 import br.com.rodolfo.algafood.domain.models.Restaurante;
 import br.com.rodolfo.algafood.domain.repository.RestauranteRepository;
 
-public class ConsultaRestauranteMain {
+public class BuscaRestauranteMain {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApiApplication.class)
@@ -18,8 +16,9 @@ public class ConsultaRestauranteMain {
             .run(args);
 
         RestauranteRepository restauranteRepository = applicationContext.getBean(RestauranteRepository.class);
-        List<Restaurante> restaurantes = restauranteRepository.listar();
 
-        restaurantes.forEach(restaurante -> System.out.println(restaurante));
+        Restaurante restaurante = restauranteRepository.buscar(1l);
+
+        System.out.println(restaurante);
     }
 }
