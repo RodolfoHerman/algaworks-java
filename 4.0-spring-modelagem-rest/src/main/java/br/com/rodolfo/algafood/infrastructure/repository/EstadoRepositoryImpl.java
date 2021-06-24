@@ -1,10 +1,12 @@
 package br.com.rodolfo.algafood.infrastructure.repository;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +38,14 @@ public class EstadoRepositoryImpl implements EstadoRepository {
 
     @Override
     @Transactional
-    public void remover(Estado estado) {
-        estado = buscar(estado.getId());
+    public void remover(Long id) {
+        Estado estado = buscar(id);
+
+        if(Objects.isNull(estado)) {
+            throw new EmptyResultDataAccessException(1);
+        }
 
         manager.remove(estado);
     }
-    
+
 }
