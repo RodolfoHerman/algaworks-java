@@ -1,10 +1,12 @@
 package br.com.rodolfo.algafood.infrastructure.repository;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +38,14 @@ public class CidadeRepositoryImpl implements CidadeRepository {
 
     @Override
     @Transactional
-    public void remover(Cidade cidade) {
-        cidade = buscar(cidade.getId());
+    public void remover(long id) {
+        Cidade cidade = buscar(id);
+
+        if(Objects.isNull(cidade)) {
+            throw new EmptyResultDataAccessException(1);
+        }
 
         manager.remove(cidade);
     }
-    
+
 }
