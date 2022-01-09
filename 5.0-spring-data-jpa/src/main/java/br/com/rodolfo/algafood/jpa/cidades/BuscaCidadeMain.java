@@ -1,5 +1,7 @@
 package br.com.rodolfo.algafood.jpa.cidades;
 
+import java.util.Optional;
+
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -17,8 +19,8 @@ public class BuscaCidadeMain {
 
         CidadeRepository cidadeRepository = applicationContext.getBean(CidadeRepository.class);
 
-        Cidade cidade = cidadeRepository.buscar(1l);
+        Optional<Cidade> cidade = cidadeRepository.findById(1l);
 
-        System.out.println(cidade);
+        cidade.ifPresent((cidadePresent) -> System.out.println(cidadePresent));
     }
 }

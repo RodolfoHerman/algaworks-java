@@ -20,6 +20,6 @@ public class ExclusaoPermissaoMain {
         Permissao permissao = new Permissao();
         permissao.setId(1l);
 
-        permissaoRepository.remover(permissao);
+        permissaoRepository.delete(permissao);
     }
 }

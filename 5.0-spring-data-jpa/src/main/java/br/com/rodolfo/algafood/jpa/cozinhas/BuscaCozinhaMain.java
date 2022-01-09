@@ -1,5 +1,7 @@
 package br.com.rodolfo.algafood.jpa.cozinhas;
 
+import java.util.Optional;
+
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -17,8 +19,8 @@ public class BuscaCozinhaMain {
 
         CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
 
-        Cozinha cozinha = cozinhaRepository.buscar(1l);
+        Optional<Cozinha> cozinha = cozinhaRepository.findById(1l);
 
-        System.out.printf("%d - %s\n", cozinha.getId(), cozinha.getNome());
+        cozinha.ifPresent((cozinhaPresent) -> System.out.printf("%d - %s\n", cozinhaPresent.getId(), cozinhaPresent.getNome()));
     }
 }

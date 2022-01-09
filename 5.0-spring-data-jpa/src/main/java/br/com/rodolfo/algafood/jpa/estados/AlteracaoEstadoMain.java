@@ -21,7 +21,7 @@ public class AlteracaoEstadoMain {
         estado.setId(1l);
         estado.setNome("SP");
 
-        estado = estadoRepository.salvar(estado);
+        estado = estadoRepository.save(estado);
 
         System.out.println(estado);
     }

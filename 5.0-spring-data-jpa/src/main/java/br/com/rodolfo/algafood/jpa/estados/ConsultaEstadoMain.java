@@ -19,7 +19,7 @@ public class ConsultaEstadoMain {
 
         EstadoRepository estadoRepository = applicationContext.getBean(EstadoRepository.class);
 
-        List<Estado> estados = estadoRepository.listar();
+        List<Estado> estados = estadoRepository.findAll();
 
         estados.forEach(estado -> System.out.println(estado));
     }

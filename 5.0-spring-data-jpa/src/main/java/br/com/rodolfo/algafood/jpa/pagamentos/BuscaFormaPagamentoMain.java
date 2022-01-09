@@ -1,5 +1,7 @@
 package br.com.rodolfo.algafood.jpa.pagamentos;
 
+import java.util.Optional;
+
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -17,8 +19,8 @@ public class BuscaFormaPagamentoMain {
 
         FormaPagamentoRepository formaPagamentoRepository = applicationContext.getBean(FormaPagamentoRepository.class);
 
-        FormaPagamento formaPagamento = formaPagamentoRepository.buscar(1l);
+        Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(1l);
 
-        System.out.println(formaPagamento);
+        formaPagamento.ifPresent((formaPagamentoPresent) -> System.out.println(formaPagamentoPresent));
     }
 }

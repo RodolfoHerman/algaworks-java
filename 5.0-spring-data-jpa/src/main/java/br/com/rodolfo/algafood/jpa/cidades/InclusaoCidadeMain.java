@@ -29,8 +29,8 @@ public class InclusaoCidadeMain {
         cidade2.setNome("Betim");
         cidade2.setEstado(estado);
 
-        cidade1 = cidadeRepository.salvar(cidade1);
-        cidade2 = cidadeRepository.salvar(cidade2);
+        cidade1 = cidadeRepository.save(cidade1);
+        cidade2 = cidadeRepository.save(cidade2);
 
         System.out.println(cidade1);
         System.out.println(cidade2);

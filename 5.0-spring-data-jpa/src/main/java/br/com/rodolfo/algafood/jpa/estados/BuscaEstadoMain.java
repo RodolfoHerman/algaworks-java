@@ -1,5 +1,7 @@
 package br.com.rodolfo.algafood.jpa.estados;
 
+import java.util.Optional;
+
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -17,8 +19,8 @@ public class BuscaEstadoMain {
 
         EstadoRepository estadoRepository = applicationContext.getBean(EstadoRepository.class);
 
-        Estado estado = estadoRepository.buscar(1l);
+        Optional<Estado> estado = estadoRepository.findById(1l);
 
-        System.out.println(estado);
+        estado.ifPresent((estadoPresent) -> System.out.println(estadoPresent));
     }
 }

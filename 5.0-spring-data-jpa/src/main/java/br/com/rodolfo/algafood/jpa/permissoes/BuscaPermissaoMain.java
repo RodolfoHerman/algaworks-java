@@ -1,5 +1,7 @@
 package br.com.rodolfo.algafood.jpa.permissoes;
 
+import java.util.Optional;
+
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -17,8 +19,8 @@ public class BuscaPermissaoMain {
 
         PermissaoRepository permissaoRepository = applicationContext.getBean(PermissaoRepository.class);
 
-        Permissao permissao = permissaoRepository.buscar(1l);
+        Optional<Permissao> permissao = permissaoRepository.findById(1l);
 
-        System.out.println(permissao);
+        permissao.ifPresent((permissaoPresent) -> System.out.println(permissaoPresent));
     }
 }

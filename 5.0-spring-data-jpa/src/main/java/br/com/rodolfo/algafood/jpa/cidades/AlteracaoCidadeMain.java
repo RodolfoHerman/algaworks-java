@@ -26,7 +26,7 @@ public class AlteracaoCidadeMain {
         cidade.setNome("Contagem");
         cidade.setEstado(estado);
 
-        cidade = cidadeRepository.salvar(cidade);
+        cidade = cidadeRepository.save(cidade);
 
         System.out.println(cidade);
     }

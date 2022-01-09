@@ -3,7 +3,7 @@ package br.com.rodolfo.algafood.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,15 +38,15 @@ public class RestauranteController {
 
     @GetMapping
     public List<Restaurante> listar() {
-        return restauranteRepository.listar();
+        return restauranteRepository.findAll();
     }
 
     @GetMapping("/{restaurante-id}")
     public ResponseEntity<Restaurante> buscar(@PathVariable("restaurante-id") Long id) {
-        Restaurante restaurante = restauranteRepository.buscar(id);
+        Optional<Restaurante> restaurante = restauranteRepository.findById(id);
     
-        if(Objects.nonNull(restaurante)) {
-            return ResponseEntity.ok(restaurante);
+        if(restaurante.isPresent()) {
+            return ResponseEntity.ok(restaurante.get());
         }
         return ResponseEntity.notFound().build();
     }
@@ -67,14 +67,14 @@ public class RestauranteController {
         @PathVariable("restaurante-id") long id,
         @RequestBody Restaurante restaurante
     ) {
-        Restaurante restauranteSalvo = restauranteRepository.buscar(id);
+        Optional<Restaurante> restauranteSalvo = restauranteRepository.findById(id);
 
-        if(Objects.nonNull(restauranteSalvo)) {
+        if(restauranteSalvo.isPresent()) {
             try {
-                BeanUtils.copyProperties(restaurante, restauranteSalvo, "id");
-                restauranteSalvo = cadastroRestauranteService.salvar(restauranteSalvo);
+                BeanUtils.copyProperties(restaurante, restauranteSalvo.get(), "id");
+                Restaurante restauranteNovo = cadastroRestauranteService.salvar(restauranteSalvo.get());
 
-                return ResponseEntity.ok(restauranteSalvo);
+                return ResponseEntity.ok(restauranteNovo);
             } catch (EntidadeNaoEncontradaException e) {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
@@ -88,12 +88,12 @@ public class RestauranteController {
         @PathVariable("restaurante-id") Long id,
         @RequestBody Map<String, Object> values
     ) {
-        Restaurante restaurante = restauranteRepository.buscar(id);
+        Optional<Restaurante> restaurante = restauranteRepository.findById(id);
 
-        if(Objects.nonNull(restaurante)) {
-            merge(values, restaurante);
+        if(restaurante.isPresent()) {
+            merge(values, restaurante.get());
 
-            return atualizar(id, restaurante);
+            return atualizar(id, restaurante.get());
         }
 
         return ResponseEntity.notFound().build();

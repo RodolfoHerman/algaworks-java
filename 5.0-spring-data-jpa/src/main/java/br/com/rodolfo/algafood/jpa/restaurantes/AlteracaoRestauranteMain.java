@@ -29,7 +29,7 @@ public class AlteracaoRestauranteMain {
         restaurante.setNome("Bar do Chico");
         restaurante.setCozinha(cozinha);
 
-        restaurante = restauranteRepository.salvar(restaurante);
+        restaurante = restauranteRepository.save(restaurante);
 
         System.out.println(restaurante);
     }

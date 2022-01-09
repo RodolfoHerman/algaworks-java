@@ -21,7 +21,7 @@ public class AlteracaoFormaPagamentoMain {
         formaPagamento.setId(1l);
         formaPagamento.setDescricao("CHEQUE");
 
-        formaPagamento = formaPagamentoRepository.salvar(formaPagamento);
+        formaPagamento = formaPagamentoRepository.save(formaPagamento);
 
         System.out.println(formaPagamento);
     }

@@ -25,8 +25,8 @@ public class InclusaoPermissaoMain {
         permissao2.setNome("CONSULTAR_CIDADES");
         permissao2.setDescricao("Permite consultar cidades.");
 
-        permissao1 = permissaoRepository.salavr(permissao1);
-        permissao2 = permissaoRepository.salavr(permissao2);
+        permissao1 = permissaoRepository.save(permissao1);
+        permissao2 = permissaoRepository.save(permissao2);
 
         System.out.println(permissao1);
         System.out.println(permissao2);

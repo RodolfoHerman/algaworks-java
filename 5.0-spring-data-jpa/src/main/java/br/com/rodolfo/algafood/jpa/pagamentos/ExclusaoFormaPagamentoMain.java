@@ -20,6 +20,6 @@ public class ExclusaoFormaPagamentoMain {
         FormaPagamento formaPagamento = new FormaPagamento();
         formaPagamento.setId(1l);
 
-        formaPagamentoRepository.remover(formaPagamento);
+        formaPagamentoRepository.delete(formaPagamento);
     }
 }

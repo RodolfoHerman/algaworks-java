@@ -20,6 +20,6 @@ public class ExclusaoCidadeMain {
         Cidade cidade = new Cidade();
         cidade.setId(1l);
 
-        cidadeRepository.remover(cidade.getId());
+        cidadeRepository.deleteById(cidade.getId());
     }
 }

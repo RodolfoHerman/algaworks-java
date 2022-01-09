@@ -22,7 +22,7 @@ public class AlteracaoPermissaoMain {
         permissao.setNome("CONSULTAR");
         permissao.setDescricao("Permite consultar produtos no banco de dados.");
 
-        permissao = permissaoRepository.salavr(permissao);
+        permissao = permissaoRepository.save(permissao);
 
         System.out.println(permissao);
     }

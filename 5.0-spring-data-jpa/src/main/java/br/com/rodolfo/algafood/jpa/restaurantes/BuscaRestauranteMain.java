@@ -1,5 +1,7 @@
 package br.com.rodolfo.algafood.jpa.restaurantes;
 
+import java.util.Optional;
+
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -17,8 +19,8 @@ public class BuscaRestauranteMain {
 
         RestauranteRepository restauranteRepository = applicationContext.getBean(RestauranteRepository.class);
 
-        Restaurante restaurante = restauranteRepository.buscar(1l);
+        Optional<Restaurante> restaurante = restauranteRepository.findById(1l);
 
-        System.out.println(restaurante);
+        restaurante.ifPresent((restauranetPresent) -> System.out.println(restauranetPresent));
     }
 }

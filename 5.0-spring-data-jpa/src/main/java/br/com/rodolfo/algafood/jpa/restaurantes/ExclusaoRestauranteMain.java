@@ -20,6 +20,6 @@ public class ExclusaoRestauranteMain {
         Restaurante restaurante = new Restaurante();
         restaurante.setId(1l);
 
-        restauranteRepository.remover(restaurante);
+        restauranteRepository.delete(restaurante);
     }
 }
