@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import br.com.rodolfo.algafood.domain.models.Restaurante;
 
-public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
+public interface RestauranteRepository extends JpaRepository<Restaurante, Long>, RestauranteRepositoryQueries {
 
     List<Restaurante> findTodosByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
 
