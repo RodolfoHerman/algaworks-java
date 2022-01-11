@@ -52,6 +52,15 @@ public class TesteController {
         return restauranteRepository.find(nome, taxaInicial, taxaFinal);
     }
 
+    @GetMapping("/restaurantes/por-nome-taxa-frete-criteria")
+    public List<Restaurante> restaurantesPorNomeTaxaFreteCriteria(
+        @RequestParam(value = "nome", required = false) String nome,
+        @RequestParam(value = "taxaInicial", required = false) BigDecimal taxaInicial,
+        @RequestParam(value = "taxaFinal", required = false) BigDecimal taxaFinal
+    ) {
+        return restauranteRepository.findWithCriteriaAPI(nome, taxaInicial, taxaFinal);
+    }
+
     @GetMapping("/restaurantes/por-nome")
     public List<Restaurante> restaurantesPorNome(
         @RequestParam("nome") String nome,
