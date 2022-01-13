@@ -92,4 +92,10 @@ public class TesteController {
         return restauranteRepository.findAll(comFreteGratis()
             .and(comNomeSemelhante(nome)));
     }
+
+    @GetMapping("/restaurantes/com-frete-gratis-interface")
+    public List<Restaurante> restaurantesComFreteGratisInterface(@RequestParam("nome") String nome) {
+        // Retira a responsabilidade de montar os specifications no controller no método acima (evita duplicar código e temos só um ponto de modificação)
+        return restauranteRepository.findComFreteGratisENomeSemelhante(nome);
+    }
 }
