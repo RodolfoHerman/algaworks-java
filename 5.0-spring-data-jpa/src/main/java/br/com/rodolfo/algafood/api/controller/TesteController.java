@@ -38,6 +38,11 @@ public class TesteController {
         return cozinhaRepository.existsCozinhaByNome(nome);
     }
 
+    @GetMapping("/cozinhas/primeiro")
+    public Optional<Cozinha> cozinhasPrimeiro() {
+        return cozinhaRepository.buscarPrimeiro();
+    }
+
     @GetMapping("/restaurantes/por-taxa-frete")
     public List<Restaurante> restaurantesPorTaxaFrete(
         @RequestParam("taxaInicial") BigDecimal taxaInicial,
@@ -97,5 +102,10 @@ public class TesteController {
     public List<Restaurante> restaurantesComFreteGratisInterface(@RequestParam("nome") String nome) {
         // Retira a responsabilidade de montar os specifications no controller no método acima (evita duplicar código e temos só um ponto de modificação)
         return restauranteRepository.findComFreteGratisENomeSemelhante(nome);
+    }
+
+    @GetMapping("/restaurantes/primeiro")
+    public Optional<Restaurante> restaurantePrimeiro() {
+        return restauranteRepository.buscarPrimeiro();
     }
 }
