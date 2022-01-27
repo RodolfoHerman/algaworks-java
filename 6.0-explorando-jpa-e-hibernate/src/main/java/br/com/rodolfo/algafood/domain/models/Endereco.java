@@ -2,6 +2,8 @@ package br.com.rodolfo.algafood.domain.models;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
@@ -24,6 +26,7 @@ public class Endereco {
     @Column(name = "endereco_bairro")
     private String bairro;
 
-    @Column(name = "endereco_cidade_id")
+    @ManyToOne
+    @JoinColumn(name = "endereco_cidade_id")
     private Cidade cidade;
 }
