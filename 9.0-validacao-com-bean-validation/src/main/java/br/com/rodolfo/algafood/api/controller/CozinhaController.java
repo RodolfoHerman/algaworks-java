@@ -50,7 +50,7 @@ public class CozinhaController {
     @PutMapping("/{cozinha-id}")
     public Cozinha atualizar(
         @PathVariable("cozinha-id") Long id,
-        @RequestBody Cozinha cozinha
+        @RequestBody @Valid Cozinha cozinha
     ) {
         Cozinha cozinhaSalva = cadastroCozinhaService.buscarOuFalhar(id);
 

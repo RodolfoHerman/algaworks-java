@@ -2,6 +2,8 @@ package br.com.rodolfo.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +46,7 @@ public class CidadeController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Cidade salvar(@RequestBody Cidade cidade) {
+    public Cidade salvar(@RequestBody @Valid Cidade cidade) {
         try {
             return cadastroCidadeService.salvar(cidade);
         } catch (EntidadeNaoEncontradaException e) {
@@ -55,7 +57,7 @@ public class CidadeController {
     @PutMapping("/{cidade-id}")
     public Cidade atualizar(
         @PathVariable("cidade-id") Long id,
-        @RequestBody Cidade cidade
+        @RequestBody @Valid Cidade cidade
     ) {
         Cidade cidadeSalva = cadastroCidadeService.buscarOuFalhar(id);
 
