@@ -28,7 +28,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import br.com.rodolfo.algafood.core.validation.Groups;
-import br.com.rodolfo.algafood.core.validation.TaxaFrete;
+import br.com.rodolfo.algafood.core.validation.Multiplo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -47,7 +47,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-    @TaxaFrete
+    @Multiplo(numero = 5)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
