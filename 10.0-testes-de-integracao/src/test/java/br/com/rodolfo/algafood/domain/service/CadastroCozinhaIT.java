@@ -1,5 +1,7 @@
 package br.com.rodolfo.algafood.domain.service;
 
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,17 +19,31 @@ public class CadastroCozinhaIT {
     @LocalServerPort
     private int port;
 
+    @BeforeEach
+    void setUp() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        RestAssured.basePath = "/cozinhas";
+        RestAssured.port = port;
+    }
+
     @Test
     void deveRetornarHttpStatus200_QuandoConsultarCozinhas() {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-
         RestAssured.given()
-            .basePath("/cozinhas")
-            .port(port)
             .accept(ContentType.JSON)
         .when()
             .get()
         .then()
             .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void deveConter4Cozinhas_QuandoConsultarCozinhas() {
+        RestAssured.given()
+            .accept(ContentType.JSON)
+        .when()
+            .get()
+        .then()
+            .body("", Matchers.hasSize(4))
+            .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
     }
 }
