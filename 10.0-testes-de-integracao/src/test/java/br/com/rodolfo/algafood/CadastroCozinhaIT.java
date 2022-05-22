@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import br.com.rodolfo.algafood.domain.models.Cozinha;
 import br.com.rodolfo.algafood.domain.repository.CozinhaRepository;
 import br.com.rodolfo.algafood.util.DatabaseCleaner;
+import br.com.rodolfo.algafood.util.ResourceUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
@@ -21,6 +22,8 @@ import io.restassured.http.ContentType;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 public class CadastroCozinhaIT {
+
+    private static final Integer COZINHA_ID_INEXISTENTE = Integer.MAX_VALUE;
 
     @LocalServerPort
     private int port;
@@ -30,6 +33,12 @@ public class CadastroCozinhaIT {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
+
+    private Cozinha cozinhaIndiana;
+    private Cozinha cozinhaTailandesa;
+    private Integer quantidadeCozinhaCadastrada;
+    private String jsonCorretoCozinhaChinesa;
+    private String jsonIncorretoCozinhaSemNome;
 
     @BeforeEach
     void setUp() {
@@ -52,20 +61,19 @@ public class CadastroCozinhaIT {
     }
 
     @Test
-    void deveConter2Cozinhas_QuandoConsultarCozinhas() {
+    void deveConterQuantidadeCorretaDeCozinhas_QuandoConsultarCozinhas() {
         RestAssured.given()
             .accept(ContentType.JSON)
         .when()
             .get()
         .then()
-            .body("", Matchers.hasSize(2))
-            .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
+            .body("", Matchers.hasSize(quantidadeCozinhaCadastrada));
     }
 
     @Test
     void deveRetornarHttpStatus201_QuandoCadastrarCozinha() {
         RestAssured.given()
-            .body("{ \"nome\": \"Chinesa\" }")
+            .body(jsonCorretoCozinhaChinesa)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
@@ -74,13 +82,52 @@ public class CadastroCozinhaIT {
             .statusCode(HttpStatus.CREATED.value());
     }
 
-    private void prepararDadosTeste() {
-        Cozinha cozinha1 = new Cozinha();
-        cozinha1.setNome("Indiana");
-        cozinhaRepository.save(cozinha1);
+    @Test
+    void deveRetornarRespostaEHttpStatusCorretos_QuandoConsultarCozinhaExistente() {
+        RestAssured.given()
+            .pathParam("cozinhaId", cozinhaIndiana.getId())
+            .accept(ContentType.JSON)
+        .when()
+            .get("/{cozinhaId}")
+        .then()
+            .statusCode(HttpStatus.OK.value())
+            .body("nome", Matchers.equalTo(cozinhaIndiana.getNome()));
+    }
 
-        Cozinha cozinha2 = new Cozinha();
-        cozinha2.setNome("Tailandesa");
-        cozinhaRepository.save(cozinha2);
+    @Test
+    void deveRetornarHttpStatus404_QuandoConsultarCozinhaInexistente() {
+        RestAssured.given()
+            .pathParam("cozinhaId", COZINHA_ID_INEXISTENTE)
+            .accept(ContentType.JSON)
+        .when()
+            .get("/{cozinhaId}")
+        .then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deveRetornarHttpStatus400_QuandoCadastrarCozinhaSemNome() {
+        RestAssured.given()
+            .body(jsonIncorretoCozinhaSemNome)
+            .accept(ContentType.JSON)
+            .contentType(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    private void prepararDadosTeste() {
+        cozinhaIndiana = new Cozinha();
+        cozinhaIndiana.setNome("Indiana");
+        cozinhaIndiana = cozinhaRepository.save(cozinhaIndiana);
+
+        cozinhaTailandesa = new Cozinha();
+        cozinhaTailandesa.setNome("Tailandesa");
+        cozinhaTailandesa = cozinhaRepository.save(cozinhaTailandesa);
+
+        quantidadeCozinhaCadastrada = (int) cozinhaRepository.count();
+        jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource("/json/correto/cozinha-chinesa.json");
+        jsonIncorretoCozinhaSemNome = ResourceUtils.getContentFromResource("/json/incorreto/cozinha-sem-nome.json");
     }
 }
