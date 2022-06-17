@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.rodolfo.algafood.api.assembler.CozinhaInputDisassembler;
+import br.com.rodolfo.algafood.api.assembler.CozinhaModelAssembler;
+import br.com.rodolfo.algafood.api.model.CozinhaModel;
+import br.com.rodolfo.algafood.api.model.input.CozinhaInput;
 import br.com.rodolfo.algafood.domain.models.Cozinha;
 import br.com.rodolfo.algafood.domain.repository.CozinhaRepository;
 import br.com.rodolfo.algafood.domain.service.CadastroCozinhaService;
@@ -31,32 +34,40 @@ public class CozinhaController {
     @Autowired
     private CadastroCozinhaService cadastroCozinhaService;
 
+    @Autowired
+    private CozinhaModelAssembler cozinhaModelAssembler;
+
+    @Autowired
+    private CozinhaInputDisassembler cozinhaInputDisassembler;
+
     @GetMapping
-    public List<Cozinha> listar() {
-        return cozinhaRepository.findAll();
+    public List<CozinhaModel> listar() {
+        return cozinhaModelAssembler.toCollection(cozinhaRepository.findAll());
     }
 
     @GetMapping("/{cozinha-id}")
-    public Cozinha buscar(@PathVariable("cozinha-id") Long id) {
-        return cadastroCozinhaService.buscarOuFalhar(id);
+    public CozinhaModel buscar(@PathVariable("cozinha-id") Long id) {
+        return cozinhaModelAssembler.toModel(cadastroCozinhaService.buscarOuFalhar(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cozinha salvar(@RequestBody @Valid Cozinha cozinha) {
-        return cadastroCozinhaService.salvar(cozinha);
+    public CozinhaModel salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
+        Cozinha cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
+
+        return cozinhaModelAssembler.toModel(cadastroCozinhaService.salvar(cozinha));
     }
 
     @PutMapping("/{cozinha-id}")
-    public Cozinha atualizar(
+    public CozinhaModel atualizar(
         @PathVariable("cozinha-id") Long id,
-        @RequestBody @Valid Cozinha cozinha
+        @RequestBody @Valid CozinhaInput cozinhaInput
     ) {
-        Cozinha cozinhaSalva = cadastroCozinhaService.buscarOuFalhar(id);
+        Cozinha cozinha = cadastroCozinhaService.buscarOuFalhar(id);
 
-        BeanUtils.copyProperties(cozinha, cozinhaSalva, "id");
+        cozinhaInputDisassembler.copyToDomainObject(cozinhaInput, cozinha);
 
-        return cozinhaRepository.save(cozinhaSalva);
+        return cozinhaModelAssembler.toModel(cozinhaRepository.save(cozinha));
     }
 
     @DeleteMapping("/{cozinha-id}")
