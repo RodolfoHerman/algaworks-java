@@ -1,10 +1,13 @@
 package br.com.rodolfo.algafood.api.assembler;
 
+import java.util.Objects;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.rodolfo.algafood.api.model.input.RestauranteInput;
+import br.com.rodolfo.algafood.domain.models.Cidade;
 import br.com.rodolfo.algafood.domain.models.Cozinha;
 import br.com.rodolfo.algafood.domain.models.Restaurante;
 
@@ -22,6 +25,10 @@ public class RestauranteInputDisassembler {
         // Para evitar org.hibernate.HibernateException: identifier of an
         // instance of Cozinha was altered from 1 to 2
         restaurante.setCozinha(new Cozinha());
+
+        if(Objects.nonNull(restaurante.getEndereco())) {
+            restaurante.getEndereco().setCidade(new Cidade());
+        }
 
         modelMapper.map(restauranteInput, restaurante);
     }
