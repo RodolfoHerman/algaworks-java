@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.rodolfo.algafood.domain.exception.EntidadeEmUsoException;
 import br.com.rodolfo.algafood.domain.exception.NegocioException;
 import br.com.rodolfo.algafood.domain.exception.UsuarioNaoEncontradoException;
+import br.com.rodolfo.algafood.domain.models.Grupo;
 import br.com.rodolfo.algafood.domain.models.Usuario;
 import br.com.rodolfo.algafood.domain.repository.UsuarioRepository;
 
@@ -21,6 +22,9 @@ public class CadastroUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CadastroGrupoService cadastroGrupoService;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
@@ -59,6 +63,22 @@ public class CadastroUsuarioService {
         }
 
         usuario.setSenha(novaSenha);
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = cadastroGrupoService.buscarOuFalhar(grupoId);
+
+        usuario.adicionarGrupo(grupo);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = cadastroGrupoService.buscarOuFalhar(grupoId);
+
+        usuario.removerGrupo(grupo);
     }
 
     public Usuario buscarOuFalhar(Long id) {

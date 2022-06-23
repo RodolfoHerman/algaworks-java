@@ -76,3 +76,5 @@ insert into grupo (id, nome) values (1, 'Gerente'), (2, 'Vendedor'), (3, 'Secret
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
 
 insert into usuario (nome, email, data_cadastro, senha) values ("Rodolfo Herman", "email@email.com", utc_timestamp, "123456"), ("Rafael Felipe", "teste@email.com", utc_timestamp, "654321"), ("Daniel Dias", "outro@email.com", utc_timestamp, "654123");
+
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2);

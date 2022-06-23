@@ -1,5 +1,6 @@
 package br.com.rodolfo.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class GrupoModelAssembler {
         return modelMapper.map(grupo, GrupoModel.class);
     }
 
-    public List<GrupoModel> toCollection(List<Grupo> grupos) {
+    public List<GrupoModel> toCollection(Collection<Grupo> grupos) {
         return grupos.stream()
             .map(this::toGrupoModel)
             .collect(Collectors.toList());
