@@ -1,5 +1,7 @@
 package br.com.rodolfo.algafood.domain.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +58,16 @@ public class CadastroRestauranteService {
         Restaurante restaurante = buscarOuFalhar(id);
 
         restaurante.inativar();
+    }
+
+    @Transactional
+    public void ativarMultiplos(List<Long> ids) {
+        ids.forEach(this::ativar);
+    }
+
+    @Transactional
+    public void inativarMultiplos(List<Long> ids) {
+        ids.forEach(this::inativar);
     }
 
     @Transactional
