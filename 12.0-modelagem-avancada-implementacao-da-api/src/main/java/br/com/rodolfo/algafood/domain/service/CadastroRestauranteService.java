@@ -9,6 +9,7 @@ import br.com.rodolfo.algafood.domain.models.Cidade;
 import br.com.rodolfo.algafood.domain.models.Cozinha;
 import br.com.rodolfo.algafood.domain.models.FormaPagamento;
 import br.com.rodolfo.algafood.domain.models.Restaurante;
+import br.com.rodolfo.algafood.domain.models.Usuario;
 import br.com.rodolfo.algafood.domain.repository.RestauranteRepository;
 
 @Service
@@ -25,6 +26,9 @@ public class CadastroRestauranteService {
 
     @Autowired
     private CadastroFormaPagamentoService cadastroFormaPagamentoService;
+
+    @Autowired
+    private CadastroUsuarioService cadastroUsuarioService;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
@@ -82,6 +86,22 @@ public class CadastroRestauranteService {
         FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
 
         restaurante.adicionarFormaPagamento(formaPagamento);
+    }
+
+    @Transactional
+    public void desassociarResponsavel(Long restauranteId, Long responsavelId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario responsavel = cadastroUsuarioService.buscarOuFalhar(responsavelId);
+
+        restaurante.removerResponsavel(responsavel);
+    }
+
+    @Transactional
+    public void associarResponsavel(Long restauranteId, Long responsavelId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario responsavel = cadastroUsuarioService.buscarOuFalhar(responsavelId);
+
+        restaurante.adicionarResponsavel(responsavel);
     }
 
     public Restaurante buscarOuFalhar(Long id) {

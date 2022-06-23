@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.rodolfo.algafood.api.assembler.UsuarioAssembler;
+import br.com.rodolfo.algafood.api.assembler.UsuarioModelAssembler;
 import br.com.rodolfo.algafood.api.assembler.UsuarioInputDisassembler;
 import br.com.rodolfo.algafood.api.model.UsuarioModel;
 import br.com.rodolfo.algafood.api.model.input.SenhaInput;
@@ -37,19 +37,19 @@ public class UsuarioController {
     private CadastroUsuarioService cadastroUsuarioService;
 
     @Autowired
-    private UsuarioAssembler usuarioAssembler;
+    private UsuarioModelAssembler usuarioModelAssembler;
 
     @Autowired
     private UsuarioInputDisassembler usuarioInputDisassembler;
 
     @GetMapping
     public List<UsuarioModel> listar() {
-        return usuarioAssembler.toCollection(usuarioRepository.findAll());
+        return usuarioModelAssembler.toCollection(usuarioRepository.findAll());
     }
 
     @GetMapping("/{usuario-id}")
     public UsuarioModel buscar(@PathVariable("usuario-id") Long id) {
-        return usuarioAssembler.toModel(cadastroUsuarioService.buscarOuFalhar(id));
+        return usuarioModelAssembler.toModel(cadastroUsuarioService.buscarOuFalhar(id));
     }
 
     @PostMapping
@@ -57,7 +57,7 @@ public class UsuarioController {
     public UsuarioModel salvar(@RequestBody @Valid UsuarioComSenhaInput usuarioComSenhaInput) {
         Usuario usuario = usuarioInputDisassembler.toDomainObject(usuarioComSenhaInput);
 
-        return usuarioAssembler.toModel(cadastroUsuarioService.salvar(usuario));
+        return usuarioModelAssembler.toModel(cadastroUsuarioService.salvar(usuario));
     }
 
     @PutMapping("/{usuario-id}")
@@ -69,7 +69,7 @@ public class UsuarioController {
 
         usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuario);
 
-        return usuarioAssembler.toModel(cadastroUsuarioService.salvar(usuario));
+        return usuarioModelAssembler.toModel(cadastroUsuarioService.salvar(usuario));
     }
 
     @DeleteMapping("/{usuario-id}")

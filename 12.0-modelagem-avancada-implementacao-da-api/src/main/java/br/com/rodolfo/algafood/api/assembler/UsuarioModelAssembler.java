@@ -1,5 +1,6 @@
 package br.com.rodolfo.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,7 @@ import br.com.rodolfo.algafood.api.model.UsuarioModel;
 import br.com.rodolfo.algafood.domain.models.Usuario;
 
 @Component
-public class UsuarioAssembler {
+public class UsuarioModelAssembler {
 
     @Autowired
     private ModelMapper modelMapper;
@@ -20,7 +21,7 @@ public class UsuarioAssembler {
         return modelMapper.map(usuario, UsuarioModel.class);
     }
 
-    public List<UsuarioModel> toCollection(List<Usuario> usuarios) {
+    public List<UsuarioModel> toCollection(Collection<Usuario> usuarios) {
         return usuarios.stream()
             .map(this::toModel)
             .collect(Collectors.toList());
