@@ -1,6 +1,7 @@
 package br.com.rodolfo.algafood.domain.models;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,4 +42,15 @@ public class ItemPedido {
     @ManyToOne
     @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
+
+    public void calcularValorTotal() {
+        BigDecimal preco = Optional.ofNullable(getPrecoUnitario())
+            .orElse(BigDecimal.ZERO);
+
+        BigDecimal qtd = Optional.ofNullable(getQuantidade())
+            .map(BigDecimal::valueOf)
+            .orElse(BigDecimal.ZERO);
+
+        this.precoTotal = preco.multiply(qtd);
+    }
 }
