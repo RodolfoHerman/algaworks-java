@@ -14,18 +14,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.rodolfo.algafood.api.assembler.PedidoFilterInputDisassembler;
 import br.com.rodolfo.algafood.api.assembler.PedidoInputDisassembler;
 import br.com.rodolfo.algafood.api.assembler.PedidoModelAssembler;
 import br.com.rodolfo.algafood.api.assembler.PedidoResumoModelAssembler;
 import br.com.rodolfo.algafood.api.model.PedidoModel;
 import br.com.rodolfo.algafood.api.model.PedidoResumoModel;
+import br.com.rodolfo.algafood.api.model.input.PedidoFilterInput;
 import br.com.rodolfo.algafood.api.model.input.PedidoInput;
 import br.com.rodolfo.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.rodolfo.algafood.domain.exception.NegocioException;
 import br.com.rodolfo.algafood.domain.models.Pedido;
 import br.com.rodolfo.algafood.domain.models.Usuario;
 import br.com.rodolfo.algafood.domain.repository.PedidoRepository;
+import br.com.rodolfo.algafood.domain.repository.filter.PedidoFilter;
 import br.com.rodolfo.algafood.domain.service.EmissaoPedidoService;
+import br.com.rodolfo.algafood.infrastructure.repository.spec.PedidoEspecs;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -46,9 +50,14 @@ public class PedidoController {
     @Autowired
     private PedidoInputDisassembler pedidoInputDisassembler;
 
+    @Autowired
+    private PedidoFilterInputDisassembler pedidoFilterInputDisassembler;
+
     @GetMapping
-    public List<PedidoResumoModel> listar() {
-        return pedidoResumoModelAssembler.toCollection(pedidoRepository.findAll());
+    public List<PedidoResumoModel> pesquisar(PedidoFilterInput pedidoFilterInput) {
+        PedidoFilter filtro = pedidoFilterInputDisassembler.toDomainObject(pedidoFilterInput);
+
+        return pedidoResumoModelAssembler.toCollection(pedidoRepository.findAll(PedidoEspecs.usandoFiltro(filtro)));
     }
 
     @GetMapping("/{pedido-codigo}")
