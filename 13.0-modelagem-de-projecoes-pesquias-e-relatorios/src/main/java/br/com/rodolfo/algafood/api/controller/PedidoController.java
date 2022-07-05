@@ -28,10 +28,10 @@ import br.com.rodolfo.algafood.api.model.input.PedidoFilterInput;
 import br.com.rodolfo.algafood.api.model.input.PedidoInput;
 import br.com.rodolfo.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.rodolfo.algafood.domain.exception.NegocioException;
+import br.com.rodolfo.algafood.domain.filter.PedidoFilter;
 import br.com.rodolfo.algafood.domain.models.Pedido;
 import br.com.rodolfo.algafood.domain.models.Usuario;
 import br.com.rodolfo.algafood.domain.repository.PedidoRepository;
-import br.com.rodolfo.algafood.domain.repository.filter.PedidoFilter;
 import br.com.rodolfo.algafood.domain.service.EmissaoPedidoService;
 import br.com.rodolfo.algafood.infrastructure.repository.spec.PedidoEspecs;
 

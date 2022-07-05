@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.rodolfo.algafood.api.model.input.PedidoFilterInput;
-import br.com.rodolfo.algafood.domain.repository.filter.PedidoFilter;
+import br.com.rodolfo.algafood.domain.filter.PedidoFilter;
 
 @Component
 public class PedidoFilterInputDisassembler {

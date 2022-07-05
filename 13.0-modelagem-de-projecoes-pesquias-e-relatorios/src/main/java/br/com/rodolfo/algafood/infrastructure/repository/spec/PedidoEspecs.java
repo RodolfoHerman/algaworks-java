@@ -7,8 +7,8 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import br.com.rodolfo.algafood.domain.filter.PedidoFilter;
 import br.com.rodolfo.algafood.domain.models.Pedido;
-import br.com.rodolfo.algafood.domain.repository.filter.PedidoFilter;
 
 public class PedidoEspecs {
 

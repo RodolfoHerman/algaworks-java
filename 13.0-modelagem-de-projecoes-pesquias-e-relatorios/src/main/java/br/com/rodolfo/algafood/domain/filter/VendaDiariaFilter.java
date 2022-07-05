@@ -1,4 +1,4 @@
-package br.com.rodolfo.algafood.domain.repository.filter;
+package br.com.rodolfo.algafood.domain.filter;
 
 import java.time.OffsetDateTime;
 
@@ -7,9 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PedidoFilter {
+public class VendaDiariaFilter {
 
-    private Long clienteId;
     private Long restauranteId;
     private OffsetDateTime dataCriacaoInicio;
     private OffsetDateTime dataCriacaoFim;
