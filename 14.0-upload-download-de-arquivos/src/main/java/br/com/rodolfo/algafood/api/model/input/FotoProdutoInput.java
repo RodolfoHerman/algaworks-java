@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.rodolfo.algafood.core.validation.FileSize;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import lombok.Setter;
 public class FotoProdutoInput {
 
     @NotNull
+    @FileSize(max = "500KB")
     private MultipartFile arquivo;
 
     @NotBlank
