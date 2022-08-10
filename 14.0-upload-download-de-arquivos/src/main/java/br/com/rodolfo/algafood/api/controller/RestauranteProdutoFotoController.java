@@ -1,5 +1,7 @@
 package br.com.rodolfo.algafood.api.controller;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,7 @@ public class RestauranteProdutoFotoController {
         @PathVariable("restaurante-id") Long restauranteId,
         @PathVariable("produto-id") Long produtoId,
         @Valid FotoProdutoInput fotoProdutoInput
-    ) {
+    ) throws IOException {
         Produto produto = cadastroProdutoService.buscarOuFalhar(produtoId, restauranteId);
 
         MultipartFile arquivo = fotoProdutoInput.getArquivo();
@@ -48,6 +50,7 @@ public class RestauranteProdutoFotoController {
         foto.setTamanho(arquivo.getSize());
         foto.setNomeArquivo(arquivo.getOriginalFilename());
 
-        return fotoProdutoModelAssembler.toModel(catalagoFotoProdutoService.salvar(foto));
+        return fotoProdutoModelAssembler.toModel(
+            catalagoFotoProdutoService.salvar(foto, arquivo.getInputStream()));
     }
 }
