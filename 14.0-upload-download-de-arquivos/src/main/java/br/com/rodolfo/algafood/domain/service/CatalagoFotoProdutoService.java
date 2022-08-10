@@ -25,9 +25,15 @@ public class CatalagoFotoProdutoService {
         Long restauranteId = foto.getRestauranteId();
         Long produtoId = foto.getProduto().getId();
         String nomeNovoArquivo = fotoStorageService.gerarNomeArquivo(foto.getNomeArquivo());
+        String nomeArquivoExistente = null;
 
         Optional<FotoProduto> fotoExistente = produtoRepository
             .findFotoById(restauranteId, produtoId);
+
+        if(fotoExistente.isPresent()) {
+            produtoRepository.delete(fotoExistente.get());
+            nomeArquivoExistente = fotoExistente.get().getNomeArquivo();
+        }
 
         fotoExistente.ifPresent(value ->
             produtoRepository.delete(value));
@@ -41,7 +47,7 @@ public class CatalagoFotoProdutoService {
             .inputStream(dadosArquivo)
         .build();
 
-        fotoStorageService.armazenar(novaFoto);
+        fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
 
         return foto;
     }

@@ -1,6 +1,7 @@
 package br.com.rodolfo.algafood.domain.service;
 
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.UUID;
 
 import lombok.Builder;
@@ -10,8 +11,18 @@ public interface FotoStorageService {
 
     void armazenar(NovaFoto novaFoto);
 
+    void remover(String nomeFoto);
+
     default String gerarNomeArquivo(String nomeOriginal) {
         return UUID.randomUUID().toString().concat("_").concat(nomeOriginal);
+    }
+
+    default void substituir(String nomeFotoExistente, NovaFoto novaFoto) {
+        this.armazenar(novaFoto);
+
+        if(Objects.nonNull(nomeFotoExistente)) {
+            this.remover(nomeFotoExistente);
+        }
     }
 
     @Getter
