@@ -1,6 +1,7 @@
 package br.com.rodolfo.algafood.infrastructure.service.storage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -37,6 +38,17 @@ public class LocalFotoStorageService implements FotoStorageService {
 
         } catch (IOException ex) {
             throw new StorageException("Não foi possível remover arquivo.", ex);
+        }
+    }
+
+    @Override
+    public InputStream recuperar(String nomeArquivo) {
+        try {
+            Path path = getArquivoPath(nomeArquivo);
+            return Files.newInputStream(path);
+
+        } catch (IOException ex) {
+            throw new StorageException("Não foi possível recuperar arquivo.", ex);
         }
     }
 

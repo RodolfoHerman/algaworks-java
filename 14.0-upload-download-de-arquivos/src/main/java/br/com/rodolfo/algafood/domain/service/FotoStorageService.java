@@ -9,6 +9,8 @@ import lombok.Getter;
 
 public interface FotoStorageService {
 
+    InputStream recuperar(String nomeArquivo);
+
     void armazenar(NovaFoto novaFoto);
 
     void remover(String nomeFoto);
