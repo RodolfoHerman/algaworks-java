@@ -3,6 +3,7 @@ package br.com.rodolfo.algafood.api.exceptionhandler;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
@@ -21,6 +22,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -64,8 +66,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        return ResponseEntity.status(status).headers(headers).build();
+    }
+
     @ExceptionHandler(ValidacaoException.class)
-    public ResponseEntity<?> handleValidacao(ValidacaoException ex, WebRequest request) {
+    public ResponseEntity<Object> handleValidacao(ValidacaoException ex, WebRequest request) {
             HttpStatus status = HttpStatus.BAD_REQUEST;
         return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), status, request);
     }
@@ -142,7 +151,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
+    public ResponseEntity<Object> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
         String detail = ex.getMessage();
@@ -161,7 +170,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<?> handleNegocio(NegocioException ex, WebRequest request) {
+    public ResponseEntity<Object> handleNegocio(NegocioException ex, WebRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ProblemType problemType = ProblemType.ERRO_NEGOCIO;
         String detail = ex.getMessage();
@@ -180,7 +189,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<?> handleEntidadeEmUso(EntidadeEmUsoException ex, WebRequest request) {
+    public ResponseEntity<Object> handleEntidadeEmUso(EntidadeEmUsoException ex, WebRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
         ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
         String detail = ex.getMessage();
@@ -262,9 +271,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
 
+        String simpleName = Optional.ofNullable(ex.getRequiredType())
+            .map(Class::getSimpleName)
+            .orElse("'indisponível'");
+
         ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
         String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', que é um tipo inválido. "
-            + "Corrija e informe um valor compatível com o tipo '%s'", ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
+            + "Corrija e informe um valor compatível com o tipo '%s'", ex.getName(), ex.getValue(), simpleName);
 
         Problem problem = createProblemBuilder(status, problemType, detail)
             .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
@@ -273,7 +286,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(
             ex,
             problem,
-            new HttpHeaders(),
+            headers,
             status,
             request
         );

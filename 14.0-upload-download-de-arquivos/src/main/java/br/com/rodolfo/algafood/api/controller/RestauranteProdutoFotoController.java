@@ -78,7 +78,7 @@ public class RestauranteProdutoFotoController {
             catalagoFotoProdutoService.buscarOuFalhar(produtoId, restauranteId));
     }
 
-    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping
     public ResponseEntity<InputStreamResource> servirFoto(
         @PathVariable("restaurante-id") Long restauranteId,
         @PathVariable("produto-id") Long produtoId,
@@ -92,9 +92,9 @@ public class RestauranteProdutoFotoController {
             List<MediaType> mediaTypesAceitas = MediaType.parseMediaTypes(acceptHeader);
 
             verificaCompatibilidadeMediaType(mediaType, mediaTypesAceitas);
-    
+
             InputStream inputStream = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
-    
+
             return ResponseEntity.ok()
                 .contentType(mediaType)
                 .body(new InputStreamResource(inputStream));
@@ -119,7 +119,7 @@ public class RestauranteProdutoFotoController {
         List<MediaType> mediaTypesAceitas
     ) throws HttpMediaTypeNotAcceptableException {
         boolean compativel = mediaTypesAceitas.stream()
-            .anyMatch(type -> mediaType.isCompatibleWith(type));
+            .anyMatch(mediaType::isCompatibleWith);
 
         if(!compativel) {
             throw new HttpMediaTypeNotAcceptableException(mediaTypesAceitas);
