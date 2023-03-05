@@ -1,13 +1,13 @@
 package br.com.rodolfo.algafood.api.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -79,7 +79,7 @@ public class RestauranteProdutoFotoController {
     }
 
     @GetMapping
-    public ResponseEntity<InputStreamResource> servirFoto(
+    public ResponseEntity<?> servirFoto(
         @PathVariable("restaurante-id") Long restauranteId,
         @PathVariable("produto-id") Long produtoId,
         @RequestHeader(name = "accept") String acceptHeader
@@ -93,11 +93,18 @@ public class RestauranteProdutoFotoController {
 
             verificaCompatibilidadeMediaType(mediaType, mediaTypesAceitas);
 
-            InputStream inputStream = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+            var fotoRecuperada = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+
+            if(fotoRecuperada.temUrl()) {
+                return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION, fotoRecuperada.getUrl())
+                .build();
+            }
 
             return ResponseEntity.ok()
                 .contentType(mediaType)
-                .body(new InputStreamResource(inputStream));
+                .body(new InputStreamResource(fotoRecuperada.getInputStream()));
 
         } catch (EntidadeNaoEncontradaException ex) {
 

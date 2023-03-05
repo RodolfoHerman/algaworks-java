@@ -4,12 +4,14 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.Builder;
 import lombok.Getter;
 
 public interface FotoStorageService {
 
-    InputStream recuperar(String nomeArquivo);
+    FotoRecuperada recuperar(String nomeArquivo);
 
     void armazenar(NovaFoto novaFoto);
 
@@ -32,6 +34,20 @@ public interface FotoStorageService {
     class NovaFoto {
 
         private String nomeArquivo;
+        private String contentType;
+        private Long contentLength;
         private InputStream inputStream;
+    }
+
+    @Getter
+    @Builder
+    class FotoRecuperada {
+
+        private InputStream inputStream;
+        private String url;
+
+        public boolean temUrl() {
+            return StringUtils.isNotBlank(url);
+        }
     }
 }

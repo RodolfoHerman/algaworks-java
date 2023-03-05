@@ -36,15 +36,14 @@ public class CatalagoFotoProdutoService {
             nomeArquivoExistente = fotoExistente.get().getNomeArquivo();
         }
 
-        fotoExistente.ifPresent(value ->
-            produtoRepository.delete(value));
-
         foto.setNomeArquivo(nomeNovoArquivo);
         foto = produtoRepository.save(foto);
         produtoRepository.flush();
 
         NovaFoto novaFoto = NovaFoto.builder()
             .nomeArquivo(foto.getNomeArquivo())
+            .contentType(foto.getContentType())
+            .contentLength(foto.getTamanho())
             .inputStream(dadosArquivo)
         .build();
 
